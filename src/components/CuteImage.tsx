@@ -1,6 +1,6 @@
 import { motion, MotionProps, useAnimationControls } from "framer-motion";
 import Image from "next/image";
-import { HTMLAttributes, useContext, useEffect, useState } from "react";
+import { HTMLAttributes, useContext, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 
 import { MusicContext } from "@/components/MusicProvider";
@@ -11,24 +11,21 @@ export type CuteImageProps = {
   MotionProps;
 
 export const CuteImage = ({ className, ...props }: CuteImageProps) => {
-  const [isHalf, setIsHalf] = useState(false);
   const { beat } = useContext(MusicContext);
   const controls = useAnimationControls();
 
   useEffect(() => {
     if (beat) {
-      if (!isHalf) {
+      if (beat.index % 2 == 0) {
         void controls.start(
           { rotate: [2, 0, -2] },
           { duration: beat.duration / 1000, ease: "linear" },
         );
-        setIsHalf(true);
       } else {
         void controls.start(
           { rotate: [-2, 0, 2] },
           { duration: beat.duration / 1000, ease: "linear" },
         );
-        setIsHalf(false);
       }
     }
   }, [beat]);
